@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Stock Analyzer</title>
+  <style>
+    :root{--bg:#0b1220;--panel:#111a2e;--muted:#91a4c7;--text:#eaf0ff;--accent:#5dd6c0;--danger:#ff7b7b;--warn:#ffd166;--line:#23314f}
+    *{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,sans-serif;background:linear-gradient(180deg,#07101d,#0b1220);color:var(--text)}
+    header,main{max-width:1300px;margin:0 auto;padding:16px}
+    .grid{display:grid;gap:14px} .g2{grid-template-columns:1fr 1fr} .g3{grid-template-columns:1.2fr .8fr .8fr} .g4{grid-template-columns:repeat(4,1fr)}
+    .card{background:rgba(17,26,46,.92);border:1px solid var(--line);border-radius:16px;padding:14px;box-shadow:0 12px 30px rgba(0,0,0,.18)}
+    h1,h2,h3{margin:0 0 8px} h1{font-size:28px} h2{font-size:18px} small,.muted{color:var(--muted)}
+    input,button,select{width:100%;padding:12px 12px;border-radius:12px;border:1px solid #2a3960;background:#0b1325;color:var(--text)}
+    button{background:linear-gradient(135deg,#1d4ed8,#14b8a6);border:none;font-weight:700;cursor:pointer}
+    button.secondary{background:#16233d;border:1px solid #2a3960}
+    table{width:100%;border-collapse:collapse;font-size:13px} th,td{padding:8px;border-bottom:1px solid #203052;text-align:left;vertical-align:top}
+    th{color:#b8c7ea;font-weight:600} .pill{display:inline-block;padding:4px 10px;border-radius:999px;background:#16233d;border:1px solid #2a3960;margin-right:6px}
+    .good{color:#7dffb7}.bad{color:#ff9c9c}.warn{color:#ffe08a}.kpi{font-size:24px;font-weight:800}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.row > *{flex:1 1 180px}
+    canvas{width:100%;height:320px;background:#09111f;border-radius:12px;border:1px solid #22304d}
+    .footer{padding:18px 16px 28px;color:var(--muted);text-align:center}
+    @media (max-width:980px){.g2,.g3,.g4{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Stock Analyzer</h1>
+    <div class="muted">Input US stocks, SG stocks, ETFs, or unit trusts. Data is designed to come from published finance sources and cached locally for offline use.</div>
+  </header>
+  <main class="grid">
+    <section class="card">
+      <div class="row">
+        <input id="ticker" placeholder="Enter ticker / UEN / fund code" value="AAPL" />
+        <select id="horizon"><option>5</option><option>10</option><option>15</option><option selected>20</option></select>
+        <button id="loadBtn">Load / Analyze</button>
+        <button class="secondary" id="sampleBtn">Use sample data</button>
+      </div>
+      <div style="margin-top:10px" class="muted">Examples: AAPL, D05.SI, SPY, VWRA.L, VEU, CPF-style unit trust code</div>
+    </section>
+
+    <section class="grid g4">
+      <div class="card"><h3>Signal</h3><div id="signal" class="kpi">—</div><small id="signalNote" class="muted">Waiting for data</small></div>
+      <div class="card"><h3>Current Price</h3><div id="price" class="kpi">—</div><small class="muted">Spot price from published market data</small></div>
+      <div class="card"><h3>Intrinsic Value</h3><div id="intrinsic" class="kpi">—</div><small class="muted">Model-based estimate</small></div>
+      <div class="card"><h3>Margin of Safety</h3><div id="mos" class="kpi">—</div><small class="muted">Intrinsic vs market price</small></div>
+    </section>
+
+    <section class="grid g2">
+      <div class="card"><h2>Price, EBITA, Free Cash Flow</h2><canvas id="chart"></canvas></div>
+      <div class="card">
+        <h2>Ratios and Metrics</h2>
+        <table id="metrics"><thead><tr><th>Metric</th><th>Value</th></tr></thead><tbody></tbody></table>
+      </div>
+    </section>
+
+    <section class="card">
+      <h2>Published Sources</h2>
+      <div id="sources" class="muted">No sources loaded yet.</div>
+    </section>
+  </main>
+  <div class="footer">Static starter with local data cache. Connect to published-source adapters for live fundamentals and market history.</div>
+  <script src="app.js"></script>
+</body>
+</html>
